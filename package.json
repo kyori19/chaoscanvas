@@ -47,12 +47,18 @@
       "properties": {
         "chaoscanvas.saturationRange": {
           "type": "array",
-          "default": [70, 100],
+          "default": [
+            70,
+            100
+          ],
           "description": "Range of saturation values for generated colors (0-100)"
         },
         "chaoscanvas.lightnessRange": {
           "type": "array",
-          "default": [40, 75],
+          "default": [
+            40,
+            75
+          ],
           "description": "Range of lightness values for generated colors (0-100)"
         }
       }
@@ -73,16 +79,18 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/sinon": "^17.0.4",
+    "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "esbuild": "^0.25.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "sinon": "^20.0.0",
+    "typescript": "^5.8.3"
   }
 }

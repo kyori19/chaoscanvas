@@ -47,6 +47,25 @@ Due to the random nature of the color assignment, ChaosCanvas may create combina
 
 For detailed release notes, please check the [CHANGELOG](CHANGELOG.md).
 
+## Development
+
+### Running Tests
+
+ChaosCanvas includes a comprehensive test suite to verify the extension's functionality:
+
+1. Make sure to install dependencies with `npm install`
+2. Install the [Extension Test Runner](https://marketplace.visualstudio.com/items?itemName=ms-vscode.extension-test-runner)
+3. Run the "watch" task via the **Tasks: Run Task** command
+4. Open the Testing view from the activity bar and click the "Run Test" button, or use the hotkey `Ctrl/Cmd + ; A`
+5. View test results in the Test Results panel
+
+The test suite includes:
+- Basic extension activation tests
+- Command registration and execution tests
+- Editor decoration tests
+- Performance tests for large files
+- UI context and command visibility tests
+
 ---
 
 **Enjoy the chaos!**
