@@ -9,9 +9,17 @@ class ChaosCanvas {
 	private tokenRegex = /(\w+|[^\w\s]+|\s+)/g;
 	private decorationTimeout: NodeJS.Timeout | undefined;
 	private maxTokensPerFile = 5000; // Limit tokens to prevent performance issues
+	private statusBarItem: vscode.StatusBarItem;
 
 	constructor(context: vscode.ExtensionContext) {
 		this.activeEditor = vscode.window.activeTextEditor;
+
+		// Create status bar item
+		this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+		this.statusBarItem.command = 'chaoscanvas.toggleChaos';
+		this.updateStatusBar();
+		this.statusBarItem.show();
+		context.subscriptions.push(this.statusBarItem);
 
 		// Register event handlers
 		vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -31,9 +39,20 @@ class ChaosCanvas {
 		vscode.commands.executeCommand('setContext', 'chaoscanvas.chaosEnabled', this.enabled);
 	}
 
+	private updateStatusBar(): void {
+		if (this.enabled) {
+			this.statusBarItem.text = '$(color-mode) Chaos: ON';
+			this.statusBarItem.tooltip = 'ChaosCanvas is active. Click to disable.';
+		} else {
+			this.statusBarItem.text = '$(color-mode) Chaos: OFF';
+			this.statusBarItem.tooltip = 'ChaosCanvas is disabled. Click to enable.';
+		}
+	}
+
 	public toggleChaos(): void {
 		this.enabled = !this.enabled;
 		vscode.commands.executeCommand('setContext', 'chaoscanvas.chaosEnabled', this.enabled);
+		this.updateStatusBar();
 
 		if (this.enabled) {
 			this.triggerUpdateDecorations();
@@ -206,5 +225,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {
-	// No cleanup needed
+	// No cleanup needed - everything is handled by subscriptions
 }

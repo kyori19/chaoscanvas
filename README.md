@@ -10,6 +10,7 @@ ChaosCanvas is a fun, experimental VSCode extension that brings colorful chaos t
 - **Language Independent**: Works with any programming language or text document
 - **Dynamic Updates**: Colors update as you type or change the text
 - **Simple Controls**: Toggle chaos mode on/off and shuffle colors with easy commands
+- **Status Bar Integration**: Check chaos mode status and toggle it directly from the status bar
 
 ## How to Use
 
@@ -18,6 +19,7 @@ ChaosCanvas is a fun, experimental VSCode extension that brings colorful chaos t
 3. Right-click in the editor and select "Toggle Chaos Mode" to activate
 4. Use "Shuffle Colors" to randomize the colors again when in chaos mode
 5. Toggle chaos mode off to return to normal syntax highlighting
+6. Alternatively, use the status bar item to check and toggle chaos mode
 
 ## Commands
 

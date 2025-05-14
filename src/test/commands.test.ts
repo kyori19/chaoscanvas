@@ -35,7 +35,63 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 		}
 	});
 	
-	// Test for shuffle behavior
+	// Test for shuffle command behavior with chaos mode enabled
+	test('Should show shuffle message when chaos mode is enabled', async function() {
+		this.timeout(10000);
+		
+		// Spy on window.showInformationMessage
+		const infoMessageStub = sinon.stub(vscode.window, 'showInformationMessage').resolves(undefined);
+		
+		try {
+			// Make sure chaos mode is enabled first
+			// First toggle to ensure a known state
+			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			
+			// Check if chaos got enabled 
+			let chaosEnabled = false;
+			for (let i = 0; i < infoMessageStub.callCount; i++) {
+				const message = infoMessageStub.getCall(i).args[0];
+				if (typeof message === 'string' && message.includes('activated')) {
+					chaosEnabled = true;
+					break;
+				} else if (typeof message === 'string' && message.includes('restored')) {
+					chaosEnabled = false;
+					break;
+				}
+			}
+			
+			// If it's not enabled, toggle again
+			if (!chaosEnabled) {
+				infoMessageStub.resetHistory();
+				await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			}
+			
+			// Clear message history
+			infoMessageStub.resetHistory();
+			
+			// Execute shuffle command
+			await vscode.commands.executeCommand('chaoscanvas.shuffleColors');
+			
+			// Check that shuffle message was shown (meaning chaos was enabled)
+			let shuffleMessageShown = false;
+			for (let i = 0; i < infoMessageStub.callCount; i++) {
+				const message = infoMessageStub.getCall(i).args[0];
+				if (typeof message === 'string' && message.includes('shuffled')) {
+					shuffleMessageShown = true;
+					break;
+				}
+			}
+			
+			assert.strictEqual(shuffleMessageShown, true, 'Should show shuffle message when chaos is enabled');
+			
+			// Disable chaos mode for cleanup
+			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+		} finally {
+			infoMessageStub.restore();
+		}
+	});
+	
+	// Test for shuffle behavior when disabled
 	test('Should show message when shuffling colors while disabled', async () => {
 		// First make sure chaos mode is disabled
 		// Stub to check if chaos mode is currently enabled
