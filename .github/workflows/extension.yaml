@@ -11,8 +11,8 @@ on:
       - main
 
 jobs:
-  lint:
-    name: Lint
+  lint-and-build:
+    name: Lint & Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,10 +30,23 @@ jobs:
       - name: Lint code
         run: npm run lint
 
+      - name: Build extension
+        run: npm run vscode:prepublish
+
+      - name: Package extension
+        run: npx @vscode/vsce package
+
+      - name: Upload VSIX as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chaoscanvas
+          path: "*.vsix"
+          retention-days: 7
+
   test:
-    name: Test & Build
+    name: Test
     runs-on: ${{ matrix.os }}
-    needs: lint
+    needs: lint-and-build
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -59,19 +72,6 @@ jobs:
       - name: Run tests on macOS/Windows
         if: runner.os != 'Linux'
         run: npm test
-
-      - name: Build extension
-        run: npm run vscode:prepublish
-
-      - name: Package extension
-        run: npx @vscode/vsce package
-
-      - name: Upload VSIX as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: chaoscanvas-${{ matrix.os }}
-          path: "*.vsix"
-          retention-days: 7
 
   publish:
     name: Publish Extension
