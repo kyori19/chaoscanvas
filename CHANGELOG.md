@@ -1,9 +1,11 @@
 # Change Log
 
-All notable changes to the "chaoscanvas" extension will be documented in this file.
+All notable changes to the ChaosCanvas extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 ## [Unreleased]
 
-- Initial release
+- Initial implementation of random token coloring
+- Added Toggle Chaos Mode command
+- Added Shuffle Colors command
+- Added configuration for saturation and lightness ranges
