@@ -5,6 +5,8 @@ All notable changes to the ChaosCanvas extension will be documented in this file
 
 ## [Unreleased]
 
+## [1.0.0]
+
 - Initial implementation of random token coloring
 - Added Toggle Chaos Mode command
 - Added Shuffle Colors command
