@@ -3,6 +3,7 @@
   "displayName": "ChaosCanvas",
   "description": "Paints every code token in a random hue, transforming your editor into a living kaleidoscope that adds a playful twist to syntax highlighting.",
   "version": "0.0.1",
+  "publisher": "kyori19",
   "repository": {
     "type": "git",
     "url": "https://github.com/kyori19/chaoscanvas.git"
