@@ -68,6 +68,8 @@ The test suite includes:
 - Performance tests for large files
 - UI context and command visibility tests
 
+For information about the CI/CD process, release procedure, and contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ---
 
 **Enjoy the chaos!**
