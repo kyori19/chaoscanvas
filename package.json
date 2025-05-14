@@ -3,21 +3,60 @@
   "displayName": "ChaosCanvas",
   "description": "Paints every code token in a random hue, transforming your editor into a living kaleidoscope that adds a playful twist to syntax highlighting.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyori19/chaoscanvas.git"
+  },
   "engines": {
     "vscode": "^1.100.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "chaoscanvas.helloWorld",
-        "title": "Hello World"
+        "command": "chaoscanvas.toggleChaos",
+        "title": "ChaosCanvas: Toggle Chaos Mode"
+      },
+      {
+        "command": "chaoscanvas.shuffleColors",
+        "title": "ChaosCanvas: Shuffle Colors"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "chaoscanvas.toggleChaos",
+          "group": "chaoscanvas",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "chaoscanvas.shuffleColors",
+          "group": "chaoscanvas",
+          "when": "editorTextFocus && chaoscanvas.chaosEnabled"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ChaosCanvas",
+      "properties": {
+        "chaoscanvas.saturationRange": {
+          "type": "array",
+          "default": [70, 100],
+          "description": "Range of saturation values for generated colors (0-100)"
+        },
+        "chaoscanvas.lightnessRange": {
+          "type": "array",
+          "default": [40, 75],
+          "description": "Range of lightness values for generated colors (0-100)"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
