@@ -9,6 +9,7 @@
     "url": "https://github.com/kyori19/chaoscanvas.git"
   },
   "engines": {
+    "node": "^18.0.0",
     "vscode": "^1.100.0"
   },
   "categories": [
