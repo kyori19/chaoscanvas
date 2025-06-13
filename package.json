@@ -92,7 +92,7 @@
     "esbuild": "^0.25.3",
     "eslint": "^9.25.1",
     "npm-run-all2": "^8.0.0",
-    "sinon": "^20.0.0",
+    "sinon": "^21.0.0",
     "typescript": "^5.8.3"
   }
 }
