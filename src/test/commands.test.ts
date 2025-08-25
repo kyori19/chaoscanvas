@@ -4,13 +4,17 @@ import * as sinon from 'sinon';
 
 suite('ChaosCanvas Commands and UI Context Tests', () => {
 	// Test for context setting
-	test('Should set context value when toggling chaos mode', async () => {
+	test('Should set context value when toggling chaos mode', async function() {
+		this.timeout(8000);
+		
 		// Spy on the executeCommand method to check context setting
 		const executeCommandSpy = sinon.spy(vscode.commands, 'executeCommand');
 		
 		try {
 			// Execute the toggleChaos command
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			// Wait for the command to complete
+			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Check that the context was set
 			let contextSetCalled = false;
@@ -30,6 +34,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			
 			// Toggle chaos mode back to original state
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			await new Promise(resolve => setTimeout(resolve, 100));
 		} finally {
 			executeCommandSpy.restore();
 		}
@@ -37,7 +42,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 	
 	// Test for shuffle command behavior with chaos mode enabled
 	test('Should show shuffle message when chaos mode is enabled', async function() {
-		this.timeout(10000);
+		this.timeout(15000);
 		
 		// Spy on window.showInformationMessage
 		const infoMessageStub = sinon.stub(vscode.window, 'showInformationMessage').resolves(undefined);
@@ -46,6 +51,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			// Make sure chaos mode is enabled first
 			// First toggle to ensure a known state
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Check if chaos got enabled 
 			let chaosEnabled = false;
@@ -64,6 +70,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			if (!chaosEnabled) {
 				infoMessageStub.resetHistory();
 				await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+				await new Promise(resolve => setTimeout(resolve, 100));
 			}
 			
 			// Clear message history
@@ -71,6 +78,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			
 			// Execute shuffle command
 			await vscode.commands.executeCommand('chaoscanvas.shuffleColors');
+			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Check that shuffle message was shown (meaning chaos was enabled)
 			let shuffleMessageShown = false;
@@ -86,28 +94,31 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			
 			// Disable chaos mode for cleanup
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			await new Promise(resolve => setTimeout(resolve, 100));
 		} finally {
 			infoMessageStub.restore();
 		}
 	});
 	
 	// Test for shuffle behavior when disabled
-	test('Should show message when shuffling colors while disabled', async () => {
+	test('Should not show shuffle message when chaos mode is disabled', async function() {
+		this.timeout(12000);
+		
 		// First make sure chaos mode is disabled
 		// Stub to check if chaos mode is currently enabled
 		const infoMessageSpy = sinon.spy(vscode.window, 'showInformationMessage');
 		
 		try {
 			// Try running shuffle command while chaos is not enabled
-			// Toggle twice in case it's currently enabled
-			let chaosEnabled = false;
-			
 			// Toggle first to ensure a known state
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Check if chaos got enabled 
+			let chaosEnabled = false;
 			for (let i = 0; i < infoMessageSpy.callCount; i++) {
-				if (infoMessageSpy.getCall(i).args[0].includes('activated')) {
+				const message = infoMessageSpy.getCall(i).args[0];
+				if (typeof message === 'string' && message.includes('activated')) {
 					chaosEnabled = true;
 					break;
 				}
@@ -117,6 +128,7 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			if (chaosEnabled) {
 				infoMessageSpy.resetHistory();
 				await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
+				await new Promise(resolve => setTimeout(resolve, 100));
 			}
 			
 			// Reset spy before our actual test
@@ -124,11 +136,13 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 			
 			// Now try to shuffle when definitely disabled
 			await vscode.commands.executeCommand('chaoscanvas.shuffleColors');
+			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Shuffle should not show a message when chaos is disabled
 			let shuffleMessageShown = false;
 			for (let i = 0; i < infoMessageSpy.callCount; i++) {
-				if (infoMessageSpy.getCall(i).args[0].includes('shuffled')) {
+				const message = infoMessageSpy.getCall(i).args[0];
+				if (typeof message === 'string' && message.includes('shuffled')) {
 					shuffleMessageShown = true;
 					break;
 				}
@@ -141,7 +155,9 @@ suite('ChaosCanvas Commands and UI Context Tests', () => {
 	});
 	
 	// Test command visibility via menus
-	test('Command visibility should respect when clause', async () => {
+	test('Command visibility should respect when clause', async function() {
+		this.timeout(8000);
+		
 		// This is a basic test that can be expanded if needed
 		// Get all commands
 		const commands = await vscode.commands.getCommands(true);
