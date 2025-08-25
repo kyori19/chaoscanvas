@@ -6,7 +6,7 @@ suite('ChaosCanvas Performance Tests', () => {
 	// Test for large file handling
 	test('Should show warning for large files', async function() {
 		// This test needs longer timeout
-		this.timeout(45000);
+		this.timeout(30000);
 		
 		// Stub the showWarningMessage method
 		const showWarningStub = sinon.stub(vscode.window, 'showWarningMessage').resolves(undefined);
@@ -26,8 +26,8 @@ suite('ChaosCanvas Performance Tests', () => {
 			// Enable chaos mode
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
 			
-			// Wait for decorations to be applied (they use setTimeout, and large files take longer)
-			await new Promise(resolve => setTimeout(resolve, 2000));
+			// Wait for decorations to be applied (they use setTimeout)
+			await new Promise(resolve => setTimeout(resolve, 1000));
 			
 			// Verify that a warning was shown
 			assert.ok(showWarningStub.called, 'Should show warning for large file');
@@ -38,7 +38,6 @@ suite('ChaosCanvas Performance Tests', () => {
 			
 			// Disable chaos mode before cleanup
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
-			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Close the document
 			await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
@@ -50,7 +49,7 @@ suite('ChaosCanvas Performance Tests', () => {
 	// Test for token limitation
 	test('Should limit decorations for performance reasons', async function() {
 		// This test needs longer timeout
-		this.timeout(45000);
+		this.timeout(30000);
 		
 		// Stub the createTextEditorDecorationType method to count decorations
 		const createDecorationStub = sinon.stub(vscode.window, 'createTextEditorDecorationType').callThrough();
@@ -69,8 +68,8 @@ suite('ChaosCanvas Performance Tests', () => {
 			// Enable chaos mode
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
 			
-			// Wait for decorations to be applied (they use setTimeout and large files take longer)
-			await new Promise(resolve => setTimeout(resolve, 2000));
+			// Wait for decorations to be applied (they use setTimeout)
+			await new Promise(resolve => setTimeout(resolve, 1000));
 			
 			// Verify that decorations were created but limited
 			assert.ok(createDecorationStub.called, 'Should have created text editor decorations');
@@ -83,7 +82,6 @@ suite('ChaosCanvas Performance Tests', () => {
 			
 			// Disable chaos mode before cleanup
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
-			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Close the document
 			await vscode.commands.executeCommand('workbench.action.closeActiveEditor');

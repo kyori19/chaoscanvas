@@ -78,8 +78,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vscode-test",
-    "test-compile": "npm run compile-tests && npm run compile && npm run lint"
+    "test": "vscode-test"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
@@ -89,7 +88,7 @@
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.4.0",
+    "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.3",
     "eslint": "^9.25.1",
     "npm-run-all2": "^8.0.0",

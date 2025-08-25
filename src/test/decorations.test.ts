@@ -23,7 +23,7 @@ suite('ChaosCanvas Decoration Tests', () => {
 	// Test for document opening behavior
 	test('Should apply decorations when chaos mode is enabled', async function() {
 		// This test needs longer timeout
-		this.timeout(15000);
+		this.timeout(10000);
 		
 		// Stub the createTextEditorDecorationType method to track decorations
 		const createDecorationStub = sinon.stub(vscode.window, 'createTextEditorDecorationType').callThrough();
@@ -35,15 +35,14 @@ suite('ChaosCanvas Decoration Tests', () => {
 			// Enable chaos mode first
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
 			
-			// Wait for decorations to be applied (they use setTimeout of 300ms + processing time)
-			await new Promise(resolve => setTimeout(resolve, 800));
+			// Wait for decorations to be applied (they use setTimeout)
+			await new Promise(resolve => setTimeout(resolve, 500));
 			
 			// Verify that decorations were created
 			assert.ok(createDecorationStub.called, 'Should have created text editor decorations');
 			
 			// Disable chaos mode before cleanup
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
-			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Clean up
 			await closeTestDocument(document);
@@ -55,7 +54,7 @@ suite('ChaosCanvas Decoration Tests', () => {
 	// Test for config impact on decorations
 	test('Configuration changes should affect decorations', async function() {
 		// This test needs longer timeout
-		this.timeout(20000);
+		this.timeout(10000);
 		
 		// Set custom configuration for the test
 		const originalSatRange = vscode.workspace.getConfiguration('chaoscanvas').get('saturationRange') as number[];
@@ -66,9 +65,6 @@ suite('ChaosCanvas Decoration Tests', () => {
 			await vscode.workspace.getConfiguration('chaoscanvas').update('saturationRange', [50, 60], vscode.ConfigurationTarget.Global);
 			await vscode.workspace.getConfiguration('chaoscanvas').update('lightnessRange', [30, 40], vscode.ConfigurationTarget.Global);
 			
-			// Wait a bit for configuration to take effect
-			await new Promise(resolve => setTimeout(resolve, 200));
-			
 			// Create a stub to verify the decoration colors
 			const createDecorationStub = sinon.stub(vscode.window, 'createTextEditorDecorationType').callThrough();
 			
@@ -78,8 +74,8 @@ suite('ChaosCanvas Decoration Tests', () => {
 			// Enable chaos mode
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
 			
-			// Wait for decorations to be applied (longer wait for config to take effect)
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			// Wait for decorations to be applied
+			await new Promise(resolve => setTimeout(resolve, 500));
 			
 			// Verify that decorations were created with expected properties
 			assert.ok(createDecorationStub.called, 'Should have created text editor decorations');
@@ -102,7 +98,6 @@ suite('ChaosCanvas Decoration Tests', () => {
 			
 			// Disable chaos mode
 			await vscode.commands.executeCommand('chaoscanvas.toggleChaos');
-			await new Promise(resolve => setTimeout(resolve, 100));
 			
 			// Clean up
 			await closeTestDocument(document);
@@ -111,7 +106,6 @@ suite('ChaosCanvas Decoration Tests', () => {
 			// Restore original configuration
 			await vscode.workspace.getConfiguration('chaoscanvas').update('saturationRange', originalSatRange, vscode.ConfigurationTarget.Global);
 			await vscode.workspace.getConfiguration('chaoscanvas').update('lightnessRange', originalLightRange, vscode.ConfigurationTarget.Global);
-			await new Promise(resolve => setTimeout(resolve, 100));
 		}
 	});
 }); 
