@@ -122,11 +122,23 @@ class ChaosCanvas {
 		let visibleText = '';
 		let visibleOffsets: { start: number, end: number }[] = [];
 		
-		for (const range of visibleRanges) {
-			const startOffset = this.activeEditor.document.offsetAt(range.start);
-			const endOffset = this.activeEditor.document.offsetAt(range.end);
-			visibleText += text.substring(startOffset, endOffset) + ' ';
-			visibleOffsets.push({ start: startOffset, end: endOffset });
+		// Handle case where visibleRanges is empty (common in VSCode 1.103+ test environments)
+		if (visibleRanges.length === 0) {
+			// Fallback: use the entire document for test environments or when visible ranges aren't available
+			const fullRange = new vscode.Range(
+				this.activeEditor.document.positionAt(0),
+				this.activeEditor.document.positionAt(text.length)
+			);
+			visibleText = text;
+			visibleOffsets.push({ start: 0, end: text.length });
+		} else {
+			// Normal case: only process visible ranges
+			for (const range of visibleRanges) {
+				const startOffset = this.activeEditor.document.offsetAt(range.start);
+				const endOffset = this.activeEditor.document.offsetAt(range.end);
+				visibleText += text.substring(startOffset, endOffset) + ' ';
+				visibleOffsets.push({ start: startOffset, end: endOffset });
+			}
 		}
 
 		let match;
@@ -134,6 +146,9 @@ class ChaosCanvas {
 		
 		// Create all decorations at once for better performance
 		const decorationOptions: Map<vscode.TextEditorDecorationType, vscode.Range[]> = new Map();
+
+		// Reset regex lastIndex to ensure fresh matching
+		this.tokenRegex.lastIndex = 0;
 
 		// Find all tokens and apply a random color to each
 		while ((match = this.tokenRegex.exec(visibleText)) && tokenCount < this.maxTokensPerFile) {
